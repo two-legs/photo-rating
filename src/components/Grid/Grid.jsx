@@ -11,12 +11,16 @@ export default class Grid extends Component {
     /**
      * Количество колонок. 
      */
-    columns: PropTypes.number.isRequired, 
+    columns: PropTypes.number.isRequired,
     /**
      * Высота элементов в гриде. 
      */
-    itemHeight: PropTypes.number
-  }
+    itemHeight: PropTypes.number,
+    /**
+     * Анимация перестроения грида. 
+     */
+    animate: PropTypes.bool
+  };
 
   constructor(props) {
     super(props);
@@ -27,7 +31,7 @@ export default class Grid extends Component {
   }
 
   render() {
-    const itemWidth = this.state.width / this.props.columns,
+    const itemWidth = Math.floor(this.state.width / this.props.columns),
       itemHeight = this.props.itemHeight || itemWidth;
     const height = this.maxRowsCount() * itemHeight;
     return (
@@ -43,6 +47,7 @@ export default class Grid extends Component {
                 height={itemHeight}
                 column={index % this.props.columns}
                 row={Math.floor(index / this.props.columns)}
+                animate={this.props.animate}
               >
                 {item}
               </GridItem>
@@ -73,7 +78,7 @@ export default class Grid extends Component {
    */
   updateWidth() {
     const rect = this.container.parentNode.getBoundingClientRect();
-    this.setState({ width: rect.width });
+    this.setState({ width: Math.floor(rect.width) });
   }
 }
 
@@ -85,21 +90,25 @@ class GridItem extends PureComponent {
     /**
      * Индекс строки. 
      */
-    row: PropTypes.number.isRequired, 
+    row: PropTypes.number.isRequired,
     /**
      * Индекс столбца. 
      */
-    column: PropTypes.number.isRequired, 
+    column: PropTypes.number.isRequired,
     /**
      * Ширина элемента. 
      */
-    width: PropTypes.number.isRequired, 
+    width: PropTypes.number.isRequired,
     /**
      * Высота элемента. 
      */
-    height: PropTypes.number.isRequired
-  }
-    
+    height: PropTypes.number.isRequired,
+    /**
+     * Анимация перестроения грида. 
+     */
+    animate: PropTypes.bool
+  };
+
   constructor(props) {
     super(props);
 
@@ -131,21 +140,23 @@ class GridItem extends PureComponent {
   }
 
   componentDidUpdate(previousProps) {
-    const newBox = this.state.position;
-    const oldBox = this.state.oldPosition;
+    if (this.props.animate) {
+      const newBox = this.state.position;
+      const oldBox = this.state.oldPosition;
 
-    const deltaX = oldBox.left - newBox.left;
-    const deltaY = oldBox.top - newBox.top;
-
-    requestAnimationFrame(() => {
-      this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-      this.element.style.transition = 'transform 0s';
+      const deltaX = oldBox.left - newBox.left;
+      const deltaY = oldBox.top - newBox.top;
 
       requestAnimationFrame(() => {
-        this.element.style.transform = '';
-        this.element.style.transition = 'transform 500ms';
+        this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        this.element.style.transition = 'transform 0s';
+
+        requestAnimationFrame(() => {
+          this.element.style.transform = '';
+          this.element.style.transition = 'transform 500ms ease-in-out 300ms';
+        });
       });
-    });
+    }
   }
 
   /**

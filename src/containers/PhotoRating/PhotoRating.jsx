@@ -6,7 +6,7 @@ import { Grid, RatedPhoto } from '../../components';
 class PhotoRating extends Component {
   render() {
     return (
-      <Grid columns={3}>
+      <Grid columns={3} animate={true}>
         {this.props.photos.map(item => (
           <RatedPhoto
             photoId={item.id}
