@@ -16,7 +16,7 @@ const photoRating = (state = [], action) => {
     case 'CHANGE_RATING':
       return state
         .map(item => rating(item, action))
-        .sort((a, b) => a.rating - b.rating);
+        .sort((a, b) => b.rating - a.rating);
     default:
       return state;
   }
