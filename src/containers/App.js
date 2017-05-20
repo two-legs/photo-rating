@@ -1,19 +1,17 @@
 import React, { Component } from 'react';
-import PhotoRating from './PhotoRating/PhotoRating'; 
+import { Route, Switch } from 'react-router-dom';
+
+import RatingPage from '../pages/RatingPage/RatingPage';
 
 import './App.css';
 
 class App extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     return (
       <div className="App">
-         <div className="container">
-          <PhotoRating /> 
-        </div>
+        <Switch>
+          <Route path="/" component={RatingPage} />
+        </Switch>
       </div>
     );
   }
