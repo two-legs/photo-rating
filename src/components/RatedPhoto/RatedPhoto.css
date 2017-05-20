@@ -12,4 +12,67 @@
   padding: 10px; 
   box-sizing: border-box;
   cursor: pointer;
+  width: 40px;
+  height: 40px;
+  margin: 5px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px 0px rgba(0,0,0,0.5);
+  font-size: 18px;
+  font-weight: 700;
+  z-index: 2; 
+}
+.RatedPhoto__badge::after {
+  content: "";
+  position: absolute;
+  top: 0; 
+  left: 0; 
+  background: #fff; 
+  box-sizing: border-box;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  z-index: 1; 
+  opacity: 0;
+}
+
+.RatedPhoto__badge_ripple-up::after { 
+  animation: ripple-up 1s; 
+}
+
+@keyframes ripple-up {
+  from {
+    transform: scale(1);
+    opacity: 1;
+    background: #fff;
+  }
+
+  50% {
+    background: #4CAF50;
+  }
+
+  to {
+    transform: scale(100);
+    opacity: 0;
+  }
+}
+
+.RatedPhoto__badge_ripple-down::after { 
+  animation: ripple-down 1s; 
+}
+
+@keyframes ripple-down {
+  from {
+    transform: scale(1);
+    opacity: 1;
+    background: #fff;
+  }
+
+  50% {
+    background: #F44336;
+  }
+
+  to {
+    transform: scale(100);
+    opacity: 0;
+  }
 }

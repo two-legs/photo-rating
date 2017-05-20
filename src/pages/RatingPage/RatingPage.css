@@ -1,4 +1,16 @@
 .RatingPage { 
   width: 100%;
-  margin: 0 auto;
 }
+
+.RatingPage__container {
+  width: 100%;
+}
+
+@media only screen and (min-width : 1200px) {
+  .RatingPage__container {
+    max-width: 1200px; 
+    margin: 0 auto;
+  }
+}
+
+

@@ -7,7 +7,9 @@ export default class RatingPage extends PureComponent {
   render() {
     return (
       <div className="RatingPage">
-        <PhotoRating />
+        <div className="RatingPage__container">
+          <PhotoRating />
+        </div>
       </div>
     );
   }

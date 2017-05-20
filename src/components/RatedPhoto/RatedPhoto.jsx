@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { Component, PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import Photo from '../Photo/Photo';
 
@@ -50,8 +50,8 @@ export default class RatedPhoto extends PureComponent {
       >
         <RatingBadge
           value={this.props.ratingValue}
-          onClick={this.handleRatingUp}
-          onContextMenu={this.handleRatingDown}
+          onRatingUpClick={this.handleRatingUp}
+          onRatingDownClick={this.handleRatingDown}
         />
         <Photo
           src={this.props.src}
@@ -80,7 +80,7 @@ export default class RatedPhoto extends PureComponent {
 /**
  * Рейтинг фотографии. 
  */
-class RatingBadge extends PureComponent {
+class RatingBadge extends Component {
   static propTypes = {
     /**
      * Значение рейтинга. 
@@ -88,15 +88,55 @@ class RatingBadge extends PureComponent {
     value: PropTypes.number.isRequired
   };
 
+  constructor(props) {
+    super(props);
+
+    this.state = { ripple: false };
+  }
+
   render() {
+    const ripple = this.state.ripple;
+
     return (
       <div
-        className="RatedPhoto__badge"
-        onClick={this.props.onClick}
-        onContextMenu={this.props.onContextMenu}
+        className={
+          'RatedPhoto__badge ' +
+            (ripple ? `RatedPhoto__badge_ripple-${ripple}` : '')
+        }
+        onClick={this.handleRatingUp.bind(this)}
+        onContextMenu={this.handleRatingDown.bind(this)}
+        ref={element => (this.element = element)}
       >
         {this.props.value}
       </div>
     );
+  }
+
+  componentDidMount() {
+    this.element.addEventListener('animationend', this.rippleDone.bind(this));
+  }
+
+  componentWillUnmount() {
+    this.element.removeEventListener('animationend', this.rippleDone);
+  }
+
+  rippleDone() {
+    this.setState({ ripple: false });
+  }
+
+  handleRatingUp(event) {
+    if (this.props.onRatingUpClick) {
+      this.props.onRatingUpClick(event);
+    }
+
+    this.setState({ ripple: 'up' });
+  }
+
+  handleRatingDown(event) {
+    if (this.props.onRatingDownClick) {
+      this.props.onRatingDownClick(event);
+    }
+
+    this.setState({ ripple: 'down' });
   }
 }
