@@ -1,9 +1,37 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import Photo from '../Photo/Photo';
 
 import './RatedPhoto.css';
 
+/**
+ * Фото с оценкой. 
+ */
 export default class RatedPhoto extends PureComponent {
+  static propTypes = {
+    /**
+     * Ширина изображения. 
+     */
+    width: PropTypes.number,
+    /**
+     * Высота изображения. 
+     */
+    height: PropTypes.number,
+    /**
+     * URL изображения. 
+     */
+    src: PropTypes.string.isRequired,
+    /**
+     * ИД фотографии. 
+     */
+    photoId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
+    /**
+     * Рейтинг изображения. 
+     */
+    ratingValue: PropTypes.number.isRequired
+  };
+
   constructor(props) {
     super(props);
 
@@ -49,7 +77,17 @@ export default class RatedPhoto extends PureComponent {
   }
 }
 
+/**
+ * Рейтинг фотографии. 
+ */
 class RatingBadge extends PureComponent {
+  static propTypes = {
+    /**
+     * Значение рейтинга. 
+     */
+    value: PropTypes.number.isRequired
+  };
+
   render() {
     return (
       <div

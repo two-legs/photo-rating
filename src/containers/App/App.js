@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Route, Switch } from 'react-router-dom';
 
-import RatingPage from '../pages/RatingPage/RatingPage';
+import { RatingPage } from '../../pages';
 
 import './App.css';
 

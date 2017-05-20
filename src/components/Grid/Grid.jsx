@@ -1,8 +1,23 @@
-import React, { Component } from 'react';
+import React, { Component, PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
 import './Grid.css';
 
+/**
+ * Сетка для элементов. 
+ */
 export default class Grid extends Component {
+  static propTypes = {
+    /**
+     * Количество колонок. 
+     */
+    columns: PropTypes.number.isRequired, 
+    /**
+     * Высота элементов в гриде. 
+     */
+    itemHeight: PropTypes.number
+  }
+
   constructor(props) {
     super(props);
 
@@ -38,24 +53,60 @@ export default class Grid extends Component {
   }
 
   componentDidMount() {
-    //const width = this.container.clientWidth;
-    const rect = this.container.parentNode.getBoundingClientRect();
-    console.log(rect);
-    this.setState({ width: rect.width });
+    this.updateWidth();
+    window.addEventListener('resize', this.updateWidth.bind(this));
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateWidth);
+  }
+
+  /**
+   * Вычисляет максиальное количество строк в гриде. 
+   */
   maxRowsCount() {
     return Math.floor(this.props.children.length / this.props.columns) + 1;
   }
+
+  /**
+   * Обновляет ширину грида. 
+   */
+  updateWidth() {
+    const rect = this.container.parentNode.getBoundingClientRect();
+    this.setState({ width: rect.width });
+  }
 }
 
-class GridItem extends Component {
+/**
+ * Элемент грида. 
+ */
+class GridItem extends PureComponent {
+  static PropTypes = {
+    /**
+     * Индекс строки. 
+     */
+    row: PropTypes.number.isRequired, 
+    /**
+     * Индекс столбца. 
+     */
+    column: PropTypes.number.isRequired, 
+    /**
+     * Ширина элемента. 
+     */
+    width: PropTypes.number.isRequired, 
+    /**
+     * Высота элемента. 
+     */
+    height: PropTypes.number.isRequired
+  }
+    
   constructor(props) {
     super(props);
 
     const position = this.getCoords(this.props.row, this.props.column);
     this.state = { position, oldPositon: position };
   }
+
   render() {
     return (
       <div
@@ -65,7 +116,7 @@ class GridItem extends Component {
           height: this.props.height,
           ...this.state.position
         }}
-        ref={element => this.element = element}
+        ref={element => (this.element = element)}
       >
         {this.props.children}
       </div>
@@ -79,40 +130,29 @@ class GridItem extends Component {
     });
   }
 
-  componentDidMount() {
-    console.log(`Mount item`);
-  }
-
-  componentWillUnmount() {
-    console.log(`Unmount item`);
-  }
-
   componentDidUpdate(previousProps) {
     const newBox = this.state.position;
     const oldBox = this.state.oldPosition;
-    
-    const deltaX = oldBox.left - newBox.left; 
-    const deltaY = oldBox.top  - newBox.top;
 
-    requestAnimationFrame( () => {
-      // Before the DOM paints, Invert it to its old position
+    const deltaX = oldBox.left - newBox.left;
+    const deltaY = oldBox.top - newBox.top;
+
+    requestAnimationFrame(() => {
       this.element.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
-      // Ensure it inverts it immediately
-      this.element.style.transition = 'transform 0s';  
+      this.element.style.transition = 'transform 0s';
 
-      requestAnimationFrame( () => {
-        // In order to get the animation to play, we'll need to wait for
-        // the 'invert' animation frame to finish, so that its inverted
-        // position has propagated to the DOM.
-        //
-        // Then, we just remove the transform, reverting it to its natural
-        // state, and apply a transition so it does so smoothly.
-        this.element.style.transform  = '';
+      requestAnimationFrame(() => {
+        this.element.style.transform = '';
         this.element.style.transition = 'transform 500ms';
       });
     });
   }
 
+  /**
+   * Получает координаты элемента.
+   * @param {number} row Индекс строки.
+   * @param {number} column Индекс столбца. 
+   */
   getCoords(row, column) {
     return {
       left: this.props.width * column,

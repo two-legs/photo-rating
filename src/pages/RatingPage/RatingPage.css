@@ -1,5 +1,4 @@
-.RatingPage { }
-.RatingPage__container {
-  width: 600px;
+.RatingPage { 
+  width: 100%;
   margin: 0 auto;
 }
