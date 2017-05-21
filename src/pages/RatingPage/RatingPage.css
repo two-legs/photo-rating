@@ -2,8 +2,14 @@
   width: 100%;
 }
 
+.RatingPage__header {
+  color: #eee;
+}
+
 .RatingPage__container {
   width: 100%;
+  box-shadow: 0 0 20px 0px rgb(0, 0, 0);
+  background: #121212;
 }
 
 @media only screen and (min-width : 1200px) {
