@@ -10,12 +10,14 @@
   width: 100%;
   box-shadow: 0 0 20px 0px rgb(0, 0, 0);
   background: #121212;
+  margin-top: 5px; 
+  margin-bottom: 40px;
 }
 
 @media only screen and (min-width : 1200px) {
   .RatingPage__container {
     max-width: 1200px; 
-    margin: 0 auto;
+    margin: 5px auto 40px;
   }
 }
 

@@ -70,7 +70,7 @@ export default class Grid extends Component {
    * Вычисляет максиальное количество строк в гриде. 
    */
   maxRowsCount() {
-    return Math.floor(this.props.children.length / this.props.columns) + 1;
+    return Math.ceil(this.props.children.length / this.props.columns);
   }
 
   /**
